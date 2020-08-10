@@ -7,7 +7,7 @@ from torch.utils.data import DataLoader
 
 from data_loader.covid_ct_dataset import *
 from model.metric import accuracy
-from utils.util import print_stats, print_summary, select_model, select_optimizer, MetricTracker
+from utils.util import print_stats, print_summary, select_model, select_optimizer, Metrics, MetricTracker
 
 
 def initialize(args):

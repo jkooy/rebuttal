@@ -58,7 +58,7 @@ def save_checkpoint(state, is_best, path, filename='last'):
 
 
 def save_model(model, optimizer, args, metrics, epoch, best_pred_loss, confusion_matrix):
-    loss = metrics.data['loss']
+    loss = metrics._data['loss']
     save_path = args.save
     make_dirs(save_path)
 

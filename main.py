@@ -46,12 +46,12 @@ def get_arguments():
     parser.add_argument('--nEpochs', type=int, default=250, help='total number of epochs')
     parser.add_argument('--device', type=int, default=0, help='gpu device')
     parser.add_argument('--seed', type=int, default=123, help='select seed number for reproducibility')
-    parser.add_argument('--classes', type=int, default=3, help='dataset classes')
+    parser.add_argument('--classes', type=int, default=2, help='dataset classes')
     parser.add_argument('--lr', default=2e-5, type=float,
                         help='learning rate (default: 1e-3)')
     parser.add_argument('--weight_decay', default=1e-7, type=float,
                         help='weight decay (default: 1e-6)')
-    parser.add_argument('--cuda', action='store_true', default=False, help='use gpu for speed-up')
+    parser.add_argument('--cuda', action='store_true', default=True, help='use gpu for speed-up')
     parser.add_argument('--tensorboard', action='store_true', default=True,
                         help='use tensorboard for loggging and visualization')
     parser.add_argument('--resume', default='', type=str, metavar='PATH',
