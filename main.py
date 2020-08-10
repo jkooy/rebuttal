@@ -33,9 +33,9 @@ def main():
         train(args, model, training_generator, optimizer, epoch, writer)
         val_metrics, confusion_matrix = validation(args, model, val_generator, epoch, writer)
 
-        best_pred_loss = util.save_model(model, optimizer, args, val_metrics, epoch, best_pred_loss, confusion_matrix)
+#         best_pred_loss = util.save_model(model, optimizer, args, val_metrics, epoch, best_pred_loss, confusion_matrix)
 
-        scheduler.step(val_metrics.avg_loss())
+#         scheduler.step(val_metrics.avg_loss())
 
 
 def get_arguments():

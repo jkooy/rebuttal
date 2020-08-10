@@ -129,7 +129,7 @@ class MetricTracker:
         self.mode = mode + '/'
         self.keys = keys
         print(self.keys)
-        self._data = pd.DataFrame(index=keys, columns=['total', 'counts', 'average'])
+        self._data = pd.DataFrame(index=['loss', 'correct', 'total', 'accuracy'], columns=['total', 'counts', 'average'])
         self.reset()
 
     def reset(self):

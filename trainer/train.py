@@ -52,6 +52,7 @@ def train(args, model, trainloader, optimizer, epoch, writer):
 
     metric_ftns = ['loss', 'correct', 'total', 'accuracy']
     train_metrics = MetricTracker(*[m for m in metric_ftns], writer=writer, mode='train')
+#     train_metrics = MetricTracker('loss', 'correct', 'total', 'accuracy', writer=writer, mode='train')
     train_metrics.reset()
 
     for batch_idx, input_tensors in enumerate(trainloader):
