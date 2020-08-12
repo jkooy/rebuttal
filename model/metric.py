@@ -1,5 +1,5 @@
 import torch
-
+import numpy as np
 
 def accuracy(output, target):
     with torch.no_grad():
@@ -9,6 +9,21 @@ def accuracy(output, target):
         correct += torch.sum(pred == target).item()
     return correct, len(target), correct / len(target)
 
+def Precision(conf_m, num_class):
+    precision = []
+    for c in range(num_class):
+        precision.append(conf_m[c, c] / conf_m[c, :].sum())
+    return np.array(precision)
+
+
+def Recall(conf_m, num_class):
+    recall = []
+    for c in range(num_class):
+        recall.append(conf_m[c, c] / conf_m[:, c].sum())
+    return np.array(recall)
+
+def f1_score(precision, recall):
+    return (2 * precision * recall) / (precision + recall)
 
 def top_k_acc(output, target, k=3):
     with torch.no_grad():

@@ -56,7 +56,7 @@ def get_arguments():
                         help='use tensorboard for loggging and visualization')
     parser.add_argument('--resume', default='', type=str, metavar='PATH',
                         help='path to latest checkpoint (default: none)')
-    parser.add_argument('--model', type=str, default='COVIDNet_large',
+    parser.add_argument('--model', type=str, default='COVIDNet_small',
                         choices=('COVIDNet_small', 'resnet18', 'mobilenet_v2', 'densenet169', 'COVIDNet_large'))
     parser.add_argument('--opt', type=str, default='adam',
                         choices=('sgd', 'adam', 'rmsprop'))

@@ -6,7 +6,9 @@ import torchvision.transforms as transforms
 from torch.utils.data import DataLoader
 
 from data_loader.covid_ct_dataset import *
-from model.metric import accuracy
+import torch.nn.functional as F
+from model.metric import accuracy, Precision, Recall, f1_score
+from sklearn.metrics import roc_auc_score
 from utils.util import print_stats, print_summary, select_model, select_optimizer, Metrics, MetricTracker
 
 
@@ -30,7 +32,8 @@ def initialize(args):
                    'num_workers': 1}
 
     train_loader = CovidCTDataset('train',root_dir='./data/data/4_4_data_crop',
-                                  txt_COVID='./data/data-split/train_COVID.txt',
+                                  txt_COVID='./data/data-split/train_COVID_all.txt',
+#                                   txt_COVID='./data/data-split/train_COVID.txt',
                                   txt_NonCOVID='./data/data-split/train_NonCOVID.txt')
     val_loader = CovidCTDataset('val',root_dir='./data/data/4_4_data_crop',
                                 txt_COVID='./data/data-split/val_COVID.txt',
@@ -87,6 +90,8 @@ def validation(args, model, testloader, epoch, writer):
     val_metrics = MetricTracker(*[m for m in metric_ftns], writer=writer, mode='val')
     val_metrics.reset()
     confusion_matrix = torch.zeros(args.classes, args.classes)
+    predlist = []
+    targetlist = []
     with torch.no_grad():
         for batch_idx, input_tensors in enumerate(testloader):
 
@@ -96,9 +101,13 @@ def validation(args, model, testloader, epoch, writer):
                 target = target.cuda()
 
             output = model(input_data)
-
+            _, preds = torch.max(output, 1)
+                                 
             loss = criterion(output, target)
-
+            score = F.softmax(output, dim=1)
+            predlist = np.append(predlist, score.cpu().numpy()[:, 1])
+            targetlist = np.append(targetlist, target.long().cpu().numpy())
+            
             correct, total, acc = accuracy(output, target)
             num_samples = batch_idx * args.batch_size + 1
             _, preds = torch.max(output, 1)
@@ -108,6 +117,11 @@ def validation(args, model, testloader, epoch, writer):
                                            writer_step=(epoch - 1) * len(testloader) + batch_idx)
 
     print_summary(args, epoch, num_samples, val_metrics, mode="Validation")
-
+    precision = Precision(confusion_matrix.cpu().numpy(), 2)
+    recall = Recall(confusion_matrix, 2)
+    f1 = f1_score(precision, recall)    
+    AUC = roc_auc_score(targetlist, predlist)
     print('Confusion Matrix\n{}'.format(confusion_matrix.cpu().numpy()))
+    print('f1 score', f1)
+    print('AUC', AUC)
     return val_metrics, confusion_matrix
